@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="APIImagesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="ErrorID" />
+          </Key>
+          <Property Name="ErrorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ErrorCode" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="510" Nullable="false" />
+          <Property Name="Severity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblImageDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ImageName" Type="nvarchar" MaxLength="255" />
+          <Property Name="ImageData" Type="nvarchar(max)" />
+          <Property Name="ImageDescription" Type="nvarchar(max)" />
+          <Property Name="ImageDate" Type="datetime2" Precision="7" />
+          <Property Name="ImageLocation" Type="nvarchar(max)" />
+        </EntityType>
+        <Function Name="UDF_GetErrorDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ErrorCode" Type="varchar" Mode="In" />
+          <Parameter Name="ObjectName" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Severity" Type="int" Nullable="false" />
+                <Property Name="Message" Type="nvarchar" MaxLength="4000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="usp_GetImageById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ImageLocation" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="usp_UploadImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ImgID" Type="nvarchar" Mode="In" />
+          <Parameter Name="ImgName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ImageData" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ImageDescription" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ImageDate" Type="datetime" Mode="In" />
+          <Parameter Name="ImageLocation" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="APIImagesModelStoreContainer">
+          <EntitySet Name="Error" EntityType="Self.Error" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblImageDetail" EntityType="Self.tblImageDetail" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="APIImagesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="UDF_GetErrorDetails_Result">
+          <Property Name="Severity" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="ErrorID" />
+          </Key>
+          <Property Name="ErrorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ErrorCode" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="510" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Severity" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblImageDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ImageName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ImageData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageDate" Type="DateTime" Precision="7" />
+          <Property Name="ImageLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="APIImagesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Errors" EntityType="Self.Error" />
+          <EntitySet Name="tblImageDetails" EntityType="Self.tblImageDetail" />
+          <FunctionImport Name="UDF_GetErrorDetails" IsComposable="true" ReturnType="Collection(APIImagesModel.UDF_GetErrorDetails_Result)">
+            <Parameter Name="ErrorCode" Mode="In" Type="String" />
+            <Parameter Name="ObjectName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetImageById" ReturnType="Collection(String)">
+            <Parameter Name="ImageLocation" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_UploadImage">
+            <Parameter Name="ImgID" Mode="In" Type="String" />
+            <Parameter Name="ImgName" Mode="In" Type="String" />
+            <Parameter Name="ImageData" Mode="In" Type="String" />
+            <Parameter Name="ImageDescription" Mode="In" Type="String" />
+            <Parameter Name="ImageDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ImageLocation" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="APIImagesModelStoreContainer" CdmEntityContainer="APIImagesEntities">
+          <EntitySetMapping Name="Errors">
+            <EntityTypeMapping TypeName="APIImagesModel.Error">
+              <MappingFragment StoreEntitySet="Error">
+                <ScalarProperty Name="ErrorID" ColumnName="ErrorID" />
+                <ScalarProperty Name="ErrorCode" ColumnName="ErrorCode" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblImageDetails">
+            <EntityTypeMapping TypeName="APIImagesModel.tblImageDetail">
+              <MappingFragment StoreEntitySet="tblImageDetail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="ImageData" ColumnName="ImageData" />
+                <ScalarProperty Name="ImageDescription" ColumnName="ImageDescription" />
+                <ScalarProperty Name="ImageDate" ColumnName="ImageDate" />
+                <ScalarProperty Name="ImageLocation" ColumnName="ImageLocation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="APIImagesModel.Store.UDF_GetErrorDetails" FunctionImportName="UDF_GetErrorDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="APIImagesModel.UDF_GetErrorDetails_Result">
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetImageById" FunctionName="APIImagesModel.Store.usp_GetImageById" />
+          <FunctionImportMapping FunctionImportName="usp_UploadImage" FunctionName="APIImagesModel.Store.usp_UploadImage" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
