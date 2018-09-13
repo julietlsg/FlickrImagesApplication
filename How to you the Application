@@ -1,0 +1,16 @@
+Location name is required as a parameter for An endpoint listing locations  : /api/Locations
+
+
+
+An endpoint listing images for a location  : /api/Images
+
+
+Main Application Instructions  :
+                                Enter a location to search for landmarks/lanscapes  e.g "Pretoria" and click on "Go" button
+                                Images from that location will display on a data list.
+                                Click on any requred image. The Image is then uploaded to the the database 
+                                If the image already exists in the databse , an error message will be displayed.
+                                
+                                To view all the saved images from the database click on the "Saved Images" link 
+                                Type in the location , then the images saved againsta that location nane witll be displayed on the datalist. '
+                                
